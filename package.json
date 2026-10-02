@@ -1,0 +1,59 @@
+{
+  "name": "shiguang-todo-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "拾光待办桌面摆件",
+  "author": "Shiguang Todo",
+  "homepage": "https://localhost/shiguang-todo",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:window": "electron . --windowed",
+    "test": "npm run test:window && npm run test:timer",
+    "test:window": "electron test/window-bounds.test.js",
+    "test:timer": "electron test/timer-settings.test.js",
+    "build:linux": "electron-builder --linux deb --x64",
+    "build:windows": "electron-builder --win nsis --x64",
+    "build:all": "npm run build:linux && npm run build:windows"
+  },
+  "devDependencies": {
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.shiguang.todo",
+    "productName": "拾光待办",
+    "asar": true,
+    "files": [
+      "app.js",
+      "index.html",
+      "styles.css",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"],
+      "artifactName": "ShiguangTodo-${version}-Windows-${arch}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "拾光待办"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": ["deb"],
+      "artifactName": "shiguang-todo-${version}-Ubuntu-${arch}.${ext}",
+      "maintainer": "Shiguang Todo"
+    },
+    "deb": {
+      "depends": ["libgtk-3-0", "libnss3"]
+    }
+  }
+}

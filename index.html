@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f1ea" />
+    <title>拾光待办</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-mark" aria-hidden="true">◒</div>
+        <div class="brand-copy">
+          <p class="eyebrow">DAILY RHYTHM</p>
+          <h1>拾光待办</h1>
+        </div>
+
+        <nav class="main-nav" aria-label="主导航">
+          <button class="nav-item active" data-view="all"><span class="nav-icon">⌂</span><span>我的清单</span><span class="nav-count" id="allCount">0</span></button>
+          <button class="nav-item" data-view="completed"><span class="nav-icon">✓</span><span>已完成</span><span class="nav-count" id="completedCount">0</span></button>
+          <button class="nav-item" data-view="trash"><span class="nav-icon">⌫</span><span>回收站</span><span class="nav-count" id="trashCount">0</span></button>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-note">
+          <span class="note-dot"></span>
+          <div>
+            <p>给今天一点节奏</p>
+            <small>完成一件，再完成一件。</small>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <span class="status-pip"></span>
+          <span>本地保存已开启</span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="date-label" id="todayLabel">今天</p>
+            <h2 id="greeting">早上好，准备开始吧</h2>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-button" id="randomButton"><span class="button-icon">⚄</span> 随机一件</button>
+            <button class="primary-button" id="focusButton"><span class="button-icon">◷</span> 开始专注</button>
+            <div class="window-actions" aria-label="窗口控制">
+              <button class="window-action" id="windowCollapse" title="收纳到屏幕右侧">›</button>
+              <button class="window-action" id="windowMinimize" title="最小化">−</button>
+              <button class="window-action close" id="windowClose" title="关闭">×</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="dashboard-grid">
+          <div class="tasks-panel panel">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker" id="viewKicker">TODAY'S LIST</p>
+                <h3 id="viewTitle">今天要做的事</h3>
+              </div>
+              <span class="task-summary" id="taskSummary">0 项待完成</span>
+            </div>
+
+            <form class="quick-add" id="taskForm">
+              <span class="plus-mark">＋</span>
+              <input id="taskInput" type="text" placeholder="添加一件新事情…" autocomplete="off" maxlength="120" />
+              <button type="submit" class="add-button">添加</button>
+            </form>
+
+            <div class="filter-row">
+              <button class="filter-chip active" data-filter="all">全部</button>
+              <button class="filter-chip" data-filter="today">今天</button>
+              <button class="filter-chip" data-filter="priority">优先</button>
+              <span class="filter-spacer"></span>
+              <button class="sort-button" id="sortButton">↕ 排序</button>
+            </div>
+
+            <div class="task-list" id="taskList"></div>
+            <div class="empty-state hidden" id="emptyState">
+              <div class="empty-symbol">✦</div>
+              <h4 id="emptyTitle">清单很轻</h4>
+              <p id="emptyDescription">把想做的事写下来，先从一件开始。</p>
+            </div>
+          </div>
+
+          <aside class="focus-panel panel">
+            <div class="focus-header">
+              <div>
+                <p class="section-kicker">RHYTHM</p>
+                <h3>专注节奏</h3>
+              </div>
+              <span class="focus-status" id="timerStatus">准备中</span>
+            </div>
+            <div class="mode-switch" role="tablist" aria-label="计时模式">
+              <button class="mode-button active" data-mode="focus">专注</button>
+              <button class="mode-button" data-mode="rest">休息</button>
+            </div>
+            <div class="timer-face">
+              <div class="timer-ring" id="timerRing">
+                <div class="timer-inner">
+                  <span class="timer-caption" id="timerCaption">FOCUS SESSION</span>
+                  <strong id="timerDisplay">25:00</strong>
+                  <span class="timer-task" id="timerTask">选择一件事开始</span>
+                </div>
+              </div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-control secondary" id="resetTimer" title="重置计时">↺</button>
+              <button class="timer-control primary" id="timerToggle"><span id="timerToggleIcon">▶</span><span id="timerToggleText">开始</span></button>
+              <button class="timer-control secondary" id="skipTimer" title="跳过当前阶段">↠</button>
+            </div>
+            <div class="timer-presets">
+              <button class="preset" id="focusPreset">专注 25 分</button>
+              <button class="preset" id="restPreset">休息 5 分</button>
+              <button class="preset configure" id="openTimerSettings" title="自定义专注与休息时长">⚙ 自定义</button>
+            </div>
+            <p class="focus-tip">专注期间可以把当前任务置顶，保持视线只在一件事上；点头部的「⚙ 自定义」即可调整专注与休息时长。</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <aside class="collapse-rail hidden" id="collapseRail" aria-label="拾光待办已收纳">
+      <button class="rail-expand" id="railExpand" title="展开拾光待办">‹</button>
+      <span class="rail-label">拾光</span>
+    </aside>
+
+    <div class="modal-backdrop hidden" id="randomModal" role="dialog" aria-modal="true" aria-labelledby="randomTitle">
+      <div class="random-modal">
+        <button class="modal-close" id="closeRandom" aria-label="关闭">×</button>
+        <p class="section-kicker">DICE ROLL</p>
+        <h3 id="randomTitle">把选择交给今天</h3>
+        <p class="random-subtitle">从未完成的事情里，随机挑一件现在就做。</p>
+        <div class="random-result" id="randomResult">
+          <span class="random-dice">⚄</span>
+          <span>准备掷骰子</span>
+        </div>
+        <button class="primary-button wide" id="rollButton"><span class="button-icon">⚄</span> 掷骰子</button>
+        <button class="text-button hidden" id="focusRandomButton">用它开始专注 →</button>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="timerSettingsModal" role="dialog" aria-modal="true" aria-labelledby="timerSettingsTitle">
+      <form class="settings-modal" id="timerSettingsForm" novalidate>
+        <button type="button" class="modal-close" id="closeTimerSettings" aria-label="关闭">×</button>
+        <p class="section-kicker">RHYTHM SETTINGS</p>
+        <h3 id="timerSettingsTitle">设置专注与休息</h3>
+        <p class="settings-subtitle">时长由你决定，保存后会自动记住，并应用到这个阶段。</p>
+
+        <div class="duration-field">
+          <div class="duration-head"><span>专注时长</span><span class="duration-hint">1 - 180 分钟</span></div>
+          <div class="duration-input">
+            <button type="button" class="step-button" data-target="focusMinutes" data-step="-5" aria-label="减少专注时长">−</button>
+            <input id="focusMinutesInput" type="number" min="1" max="180" step="1" inputmode="numeric" value="25" aria-label="专注时长（分钟）" />
+            <button type="button" class="step-button" data-target="focusMinutes" data-step="5" aria-label="增加专注时长">＋</button>
+            <span class="duration-unit">分钟</span>
+          </div>
+          <div class="duration-chips" role="group" aria-label="专注时长快捷选择">
+            <button type="button" class="chip" data-target="focusMinutes" data-value="15">15</button>
+            <button type="button" class="chip" data-target="focusMinutes" data-value="25">25</button>
+            <button type="button" class="chip" data-target="focusMinutes" data-value="45">45</button>
+            <button type="button" class="chip" data-target="focusMinutes" data-value="60">60</button>
+            <button type="button" class="chip" data-target="focusMinutes" data-value="90">90</button>
+          </div>
+        </div>
+
+        <div class="duration-field">
+          <div class="duration-head"><span>休息时长</span><span class="duration-hint">1 - 60 分钟</span></div>
+          <div class="duration-input">
+            <button type="button" class="step-button" data-target="restMinutes" data-step="-1" aria-label="减少休息时长">−</button>
+            <input id="restMinutesInput" type="number" min="1" max="60" step="1" inputmode="numeric" value="5" aria-label="休息时长（分钟）" />
+            <button type="button" class="step-button" data-target="restMinutes" data-step="1" aria-label="增加休息时长">＋</button>
+            <span class="duration-unit">分钟</span>
+          </div>
+          <div class="duration-chips" role="group" aria-label="休息时长快捷选择">
+            <button type="button" class="chip" data-target="restMinutes" data-value="3">3</button>
+            <button type="button" class="chip" data-target="restMinutes" data-value="5">5</button>
+            <button type="button" class="chip" data-target="restMinutes" data-value="10">10</button>
+            <button type="button" class="chip" data-target="restMinutes" data-value="15">15</button>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button type="button" class="ghost-button" id="resetTimerSettings">恢复默认</button>
+          <button type="submit" class="primary-button" id="saveTimerSettings">保存设置</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+    <div class="context-menu hidden" id="contextMenu" role="menu" aria-label="快捷操作"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
